@@ -20,10 +20,9 @@ const registerFormSchema = z.object({
   name: z
     .string()
     .min(3, { message: 'O nome precisa ter pelo menos 3 letras.' })
-    .regex(/^([a-z]+)$/i, {
-      message: 'O usuário precisa ter apenas letras.',
-    })
-    .transform(name => name.toLowerCase()),
+    .regex(/^([a-z ]+)$/i, {
+      message: 'O nome precisa ter apenas letras.',
+    }),
 });
 
 type RegisterFormData = z.infer<typeof registerFormSchema>;
@@ -62,7 +61,7 @@ const RegisterPage = () => {
       </Header>
 
       <Form as="form" onSubmit={handleSubmit(handleRegister)}>
-        <label htmlFor="">
+        <label>
           <Text size="sm">Nome de usuário</Text>
 
           <TextInput
@@ -76,7 +75,7 @@ const RegisterPage = () => {
           )}
         </label>
 
-        <label htmlFor="">
+        <label>
           <Text size="sm">Nome completo</Text>
 
           <TextInput placeholder="Seu nome" {...register('name')} />
