@@ -1,9 +1,11 @@
+import { AxiosError } from 'axios';
 import { useRouter } from 'next/router';
 import { ArrowRight } from 'phosphor-react';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+import { api } from '@/lib/axios';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Heading, MultiStep, Text, TextInput } from '@ignite-ui/react';
 
@@ -39,7 +41,20 @@ const RegisterPage = () => {
   });
 
   async function handleRegister(data: RegisterFormData) {
-    console.log(data);
+    try {
+      const response = await api.post('/users', {
+        name: data.name,
+        username: data.username,
+      });
+
+      console.log(response.data);
+    } catch (error) {
+      if (error instanceof AxiosError && error.response?.data?.message) {
+        alert(error.response?.data?.message);
+      } else {
+        console.log(error);
+      }
+    }
   }
 
   useEffect(() => {
