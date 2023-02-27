@@ -60,4 +60,5 @@ async function auth(request: NextApiRequest, response: NextApiResponse) {
   );
 }
 
+export { buildNextAuthOptions };
 export default auth;
