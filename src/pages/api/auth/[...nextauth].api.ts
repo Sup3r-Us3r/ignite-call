@@ -1,12 +1,12 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse, NextPageContext } from 'next';
 import NextAuth, { type NextAuthOptions } from 'next-auth';
 import GoogleProvider, { type GoogleProfile } from 'next-auth/providers/google';
 
 import { PrismaAdapter } from '@/lib/auth/prisma-adapter';
 
 function buildNextAuthOptions(
-  request: NextApiRequest,
-  response: NextApiResponse,
+  request: NextApiRequest | NextPageContext['req'],
+  response: NextApiResponse | NextPageContext['res'],
 ): NextAuthOptions {
   return {
     adapter: PrismaAdapter(request, response),
