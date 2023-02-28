@@ -22,13 +22,13 @@ model User {
   accounts      Account[]
   sessions      Session[]
   timeIntervals UserTimeInterval[]
+  schedulings   Scheduling[]
 
   @@map("users")
 }
 
 model Account {
   id                  String  @id @default(cuid())
-  user_id             String
   type                String
   provider            String
   provider_account_id String
@@ -40,7 +40,8 @@ model Account {
   id_token            String?
   session_state       String?
 
-  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id String
+  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@unique([provider, provider_account_id])
   @@map("accounts")
@@ -49,22 +50,36 @@ model Account {
 model Session {
   id            String   @id @default(cuid())
   session_token String   @unique
-  user_id       String
   expires       DateTime
 
-  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id String
+  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@map("sessions")
 }
 
 model UserTimeInterval {
   id                    String @id @default(uuid())
-  user_id               String
   week_day              Int
   time_start_in_minutes Int
   time_end_in_minutes   Int
 
-  user User @relation(fields: [user_id], references: [id])
+  user_id String
+  user    User   @relation(fields: [user_id], references: [id])
 
   @@map("user_time_intervals")
+}
+
+model Scheduling {
+  id           String   @id @default(uuid())
+  date         DateTime
+  name         String
+  email        String
+  observations String?
+  created_at   DateTime @default(now())
+
+  user_id String
+  user    User   @relation(fields: [user_id], references: [id])
+
+  @@map("schedulings")
 }
